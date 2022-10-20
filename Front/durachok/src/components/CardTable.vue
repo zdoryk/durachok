@@ -14,10 +14,8 @@ export default {
   data(){
     return{
       card_value: {
-        card_rank: '5',
-        card_suit: 'hearts',
-        // card_path: "src/assets/cards/SVG-cards-1.3/" + this.card_value.card_rank + "_of_" + this.card_value.card_suit + ".svg"
-        card_path: this.$store.state.card.card_path
+        card_rank: 'queen',
+        card_suit: 'diamonds',
       }
     }
   }

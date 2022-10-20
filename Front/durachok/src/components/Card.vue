@@ -23,14 +23,9 @@ export default {
   },
   data(){
     return{
-      // mySVG: require("../assets/cards/SVG-cards-1.3/5_of_hearts.svg")
+
     }
   },
-
-  // created() {
-  //   let path = "../assets/cards/SVG-cards-1.3/" + this.card.card_rank + "_of_" + this.card.card_suit + ".svg"
-  //   this.mySVG = require(path)
-  // },
 
   computed: {
     cardPath(){
