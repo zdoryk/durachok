@@ -1,6 +1,7 @@
 <template>
-  <div class="card-table-card">
-    <img :style="cssVars" class="card" :src="icon"/>
+  <div class="card-table-card" :style="cssVars">
+    <img :style="cssVars" class="card-kozir" :src="icon" v-if="this.card.card_height===150"/>
+    <img :style="cssVars" class="card" :src="icon" v-if="this.card.card_height===120"/>
   </div>
 </template>
 
@@ -13,6 +14,10 @@ export default {
   components: {},
   props: {
     card: Object,
+    top_or_bot: {
+      default: '',
+      type: String
+    }
   },
   data(){
     return{
@@ -27,7 +32,9 @@ export default {
 
   computed: {
     ...mapGetters({
-      card_values: "CARD_VALUES"
+      card_values: "CARD_VALUES",
+      top_cards: "TOP_CARDS",
+      bottom_cards: "BOTTOM_CARDS"
     }),
 
     cardPath(){
@@ -38,13 +45,41 @@ export default {
       return icons[this.cardPath]
     },
 
+    positionMultiplier() {
+      // console.log(this.top_or_bot)
+      return 128
+    },
+
+    cardPosition(){
+      return this.card.card_index * this.positionMultiplier
+    },
 
     cssVars(){
-      return{
-        "--height": this.card.card_height + 'px',
+      if (this.top_or_bot !== "top" && this.top_or_bot !== "bot"){
+        return{
+          "--height": this.card.card_height + 'px',
+          "--position": "static",
+        }
+      } if ( this.top_or_bot === "top") {
+        return {
+          "--height": this.card.card_height + 'px',
+          "--left": "-365px",
+          // "--bottom": "20px",
+          "--top": "100px",
+          "--translate": "translate(" + this.cardPosition + "px, -10px)",
+          "--position": "absolute"
+        }
+      } else {
+        return {
+          "--height": this.card.card_height + 'px',
+          "--left": "10",
+          // "--bottom": "35px",
+          "--top": "85px",
+          "--translate": "translate(" + this.cardPosition + "px, -10px)",
+          "--position": "absolute"
+        }
       }
     }
-
   }
 }
 </script>
@@ -55,13 +90,28 @@ export default {
   font-size: 30px;
 }
 
-
-.card{
+.card-kozir, .card{
   height: var(--height);
   transition: 0.1s ease-in-out;
-  bottom: 35px;
-  //position: relative;
+}
+
+
+.card{
+  position: var(--position);
+
+  //position: var(--position);
+  transform: var(--translate);
   //bottom: 520px;
+  right: 300px;
+  top: var(--top);
+  left: var(--left);
+  //bottom: var(--bottom);
+
+}
+
+.card-table-card{
+  position: var(--position) ;
+
 }
 
 

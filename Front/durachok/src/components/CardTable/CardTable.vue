@@ -5,7 +5,7 @@
       <div class="card-deck">
         <div class="card-deck-amount">Koloda: 10</div>
         <div class="card-deck-back"></div>
-        <CardTableCard v-bind:card="this.$store.state.kozir" id="kozir"/>
+        <CardTableCard :card="this.$store.state.kozir" id="kozir"/>
       </div>
     </div>
     <div class="second-column">
@@ -15,6 +15,7 @@
               v-for="(card_value, key, index) in this.cardsOnBot"
               :key="index"
               v-bind:card="card_value"
+              :top_or_bot="bot"
           />
         </div>
         <div class="cards-on-top">
@@ -22,6 +23,7 @@
               v-for="(card_value, key, index) in this.cardsOnTop"
               :key="index"
               v-bind:card="card_value"
+              :top_or_bot="top"
           />
         </div>
 
@@ -46,10 +48,8 @@ export default {
   components: {CardTableCard},
   data(){
     return{
-      card_value: {
-        card_rank: 'queen',
-        card_suit: 'diamonds',
-      }
+      top: "top",
+      bot: "bot"
     }
   },
 
@@ -60,7 +60,9 @@ export default {
 
     cardsOnBot(){
       return this.$store.state.cards_on_bot
-    }
+    },
+
+
 
   }
 }
@@ -150,19 +152,19 @@ export default {
   .cards-on-bot, .cards-on-top{
     display: flex;
     justify-content: space-evenly;
-    position: relative;
+    //position: relative;
   }
 
   .cards-on-top{
     //top: 70px;
     z-index: 3;
-    left: 20px;
-    bottom: 50px;
+    //left: 20px;
+    //bottom: 50px;
   }
 
   .cards-on-bot{
     z-index: 2;
-    top: 70px;
+    //top: 70px;
     //bottom: 50px;
   }
 
