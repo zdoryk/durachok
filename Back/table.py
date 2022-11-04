@@ -18,3 +18,5 @@ class Table:
     def clear_table(self):
         self.__table = []
 
+    def return_card_for_beat(self):
+        return self.__table[-1][0]

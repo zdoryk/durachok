@@ -10,6 +10,7 @@ K = 13
 A = 14
 DECK_SIZE = 36
 
+
 class Card:
     def __init__(self, rank: str, suit: str, position: int):
         self.rank = rank
@@ -43,6 +44,8 @@ class Card:
         self.position = pos
         return self
 
+    def get_suit(self):
+        return self.suit
+
     def get_full_info(self):
         return f'{self.rank} of {self.suit} [{self.position}]'
-

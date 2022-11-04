@@ -1,11 +1,11 @@
 import card
-from random import shuffle
+from random import shuffle, choice
 
 
 class Deck:
     def __init__(self):
         self.__deck = []
-
+        self.__trump = choice(['Diamonds', 'Hearts', 'Clubs', 'Spades'])
         self.__create_deck()
 
     def __create_deck(self):
@@ -32,3 +32,5 @@ class Deck:
     def get_deck_size(self):
         return len(self.__deck)
 
+    def get_trump(self):
+        return self.__trump
