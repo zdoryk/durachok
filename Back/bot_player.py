@@ -45,11 +45,27 @@ class BotPlayer:  # TODO: дописать бота
             self.__hand.remove(card_)
             return card_
 
-    def start_attack(self):
-        possible_card = [card_ for card_ in self.__hand if card_.suit != self.__trump]
+    def start_attack(self, played_card: []):
+        possible_card = []
 
-        if len(possible_card) == 0:
-            possible_card.extend(self.__hand)
+        if played_card:
+            played_card = [card_.rank for card_ in played_card]
+
+            # сортируем по номиналу
+            possible_card = [card_ for card_ in self.__hand if card_.rank in played_card]
+
+            # Не подбрасываем карты выше вальта и козырные
+            possible_card = [card_ for card_ in possible_card if card_.suit != self.__trump
+                             and card_.get_card_value() < 11]
+
+            if len(possible_card) == 0:
+                return False
+
+        if not played_card:
+            possible_card = [card_ for card_ in self.__hand if card_.suit != self.__trump]
+
+            if len(possible_card) == 0:
+                possible_card.extend(self.__hand)
 
         card_ = sorted(possible_card, key=lambda c: c.get_card_value())[0]
         self.__hand.remove(card_)

@@ -116,10 +116,10 @@ class Game:
         # Часть игрока
         if self.__player.has_turn:
             # Выбираем карту
-            player_decision = self.__player.start_attack()
+            player_decision = self.__player.start_attack(self.__table.return_cards())
 
-            # Написано на тот случай, если игрок захочет преждевременно прервать игру и сдаться
-            if player_decision == -1 or self.__player.get_hand_size() == 0:
+            # Написано на случай, если игрок не захочет подкидывать карту.
+            if not player_decision or self.__player.get_hand_size() == 0:
                 self.__end_turn(0)
                 self.__give_turn()
 
@@ -133,31 +133,36 @@ class Game:
                 if card_:
                     print(f"Bot beats using {card_.get_card_info()}")
                     self.__table.beat_card(card_)
-                    self.__end_turn(0)
-                    self.__give_turn()
-
+                    # self.__end_turn(0)
+                    # self.__give_turn()
+                    self.__lead()
                 else:
                     self.__end_turn(2)
 
         # Часть бота
         if self.__bot_player.has_turn:
             # бот походил
-            card_ = self.__bot_player.start_attack()
+            card_ = self.__bot_player.start_attack(self.__table.return_cards())
 
-            # Картая появилась на столе
-            self.__table.new_attack(card_)
-
-            # Игрок выбирает карту, который он будет биться
-            player_card = self.__player.defend(self.__table.return_card_for_beat())
-
-            # Если игрок таки решил побиться
-            if player_card:
-                self.__table.beat_card(player_card)
-                self.__give_turn()
+            # на те случаи, когда бот должен подкинуть, но не может
+            if not card_:
                 self.__end_turn(0)
-            # Если игрок не бьется, то он забирает карты
-            else:
-                self.__end_turn(1)
+                self.__give_turn()
+
+            if card_:
+                # Карта появилась на столе
+                self.__table.new_attack(card_)
+
+                # Игрок выбирает карту, который он будет биться
+                player_card = self.__player.defend(self.__table.return_card_for_beat())
+
+                # Если игрок таки решил побиться
+                if player_card:
+                    self.__table.beat_card(player_card)
+                    self.__lead()
+                # Если игрок не бьется, то он забирает карты
+                else:
+                    self.__end_turn(1)
 
     # Передача хода другому игроку
     def __give_turn(self):

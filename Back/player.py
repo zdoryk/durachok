@@ -22,15 +22,40 @@ class Player:
     def get_hand_size(self) -> int:
         return len(self.__hand)
 
-    def start_attack(self):
-        print('Player`s turn')
-        print(f"Trump : {self.__trump}")
-        print(self.print_hand())
-        choose = DECK_SIZE + 1
-        while int(choose) >= self.get_hand_size() or int(choose) == -1:
-            choose = int(input('Choose a card -> '))
+    def start_attack(self, played_card: []):
+        # Если мы подкидываем
+        if played_card:
 
-        return self.__hand.pop(choose)
+            played_card = [card_.rank for card_ in played_card]
+
+            choose = DECK_SIZE + 1
+            while True:
+                print("The player continues turn ")
+                print(f'Ranks on the table :{played_card}')
+                print(f"Trump : {self.__trump}")
+                print(self.print_hand())
+
+                choose = int(input('Choose a card -> '))
+
+                if choose == -1:
+                    return False
+
+                if self.__hand[choose].rank in played_card:
+                    return self.__hand.pop(choose)
+
+                else:
+                    print("You cannot choose this card")
+
+        # Если мы начинаем ход
+        else:
+            print('Player`s turn')
+            print(f"Trump : {self.__trump}")
+            print(self.print_hand())
+            choose = DECK_SIZE + 1
+            while int(choose) >= self.get_hand_size() or int(choose) == -1:
+                choose = int(input('Choose a card -> '))
+
+            return self.__hand.pop(choose)
 
     def set_turn(self, state):
         self.has_turn = state
@@ -62,6 +87,7 @@ class Player:
             return self.__hand.pop(choose)
 
         else:
+            input("You cannot beat this. Press ENTER")
             return False
 
     def surrender(self):
