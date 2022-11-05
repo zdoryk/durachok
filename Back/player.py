@@ -46,15 +46,15 @@ class Player:
 
                 choose = int(input('Choose a card -> '))
 
+                if int(choose) == -1:
+                    return False
+
                 if self.__hand[choose].get_card_value() > card_.get_card_value() and \
                         self.__hand[choose].suit == card_.suit:
                     break
 
                 if self.__hand[choose].suit == self.__trump and card_.suit != self.__trump:
                     break
-
-                if int(choose) == -1:
-                    return False
 
                 else:
                     print("You cannot beat using this card")

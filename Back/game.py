@@ -113,17 +113,23 @@ class Game:
             print("Bot starts")
 
     def __lead(self):
+        # Часть игрока
         if self.__player.has_turn:
+            # Выбираем карту
             player_decision = self.__player.start_attack()
 
+            # Написано на тот случай, если игрок захочет преждевременно прервать игру и сдаться
             if player_decision == -1 or self.__player.get_hand_size() == 0:
                 self.__end_turn(0)
                 self.__give_turn()
 
             else:
+                # Кладём карту на стол
                 self.__table.new_attack(player_decision)
+                # Просим бота сделать решение
                 card_ = self.__bot_player.defence(self.__table.return_card_for_beat())
 
+                # Если у него есть карта, которой он может побиться то :
                 if card_:
                     print(f"Bot beats using {card_.get_card_info()}")
                     self.__table.beat_card(card_)
@@ -133,7 +139,7 @@ class Game:
                 else:
                     self.__end_turn(2)
 
-        # TODO: дописать невозможность побиться
+        # Часть бота
         if self.__bot_player.has_turn:
             # бот походил
             card_ = self.__bot_player.start_attack()
