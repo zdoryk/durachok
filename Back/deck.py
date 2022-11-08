@@ -34,3 +34,6 @@ class Deck:
 
     def get_trump(self):
         return self.__trump
+    
+    def get_last_card(self):
+        return self.__deck[-1]

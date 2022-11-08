@@ -21,7 +21,7 @@
 import CardTable from "@/components/CardTable/CardTable";
 import HandWithCards from "@/components/HandWithCards/HandWithCards";
 import OpponentComponent from "@/components/Opponent";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 
 export default {
@@ -33,9 +33,13 @@ export default {
     }
   },
   methods: {
-
+    ...mapActions(['GET_INITIAL'])
+  },
+  created() {
+    this.GET_INITIAL()
   },
   computed: {
+
     ...mapGetters({
       player: "PLAYER",
       cards: "CARDS",

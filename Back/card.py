@@ -49,3 +49,10 @@ class Card:
 
     def get_full_info(self):
         return f'{self.rank} of {self.suit} [{self.position}]'
+
+
+    def get_card_dict(self):
+        return {
+            "card_rank": self.get_card_value(),
+            "card_suit": self.suit,
+        }

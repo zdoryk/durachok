@@ -29,8 +29,25 @@ class Game:
             self.__player.take_card(self.__deck.get_card())
             self.__bot_player.take_card((self.__deck.get_card()))
 
-    def return_players(self):
-        return self.__player, self.__bot_player
+
+    # def test(self):
+    #     self.__deck.get_card()
+        
+    def get_initial(self):
+        return {
+            "player_cards": self.return_player().get_hand(),
+            "trump": self.get_trump(),
+            "player_state": self.__player.has_turn,
+            "deck_size": self.get_deck_size()
+        }
+    
+    # TODO: Доделать козырь
+    def get_trump(self):
+        # return self.__trump
+        return self.__deck.get_last_card().get_card_dict()
+
+    def return_player(self):
+        return self.__player
 
     def get_deck_size(self) -> int:
         return self.__deck.get_deck_size()
@@ -40,6 +57,7 @@ class Game:
 
     def start_game(self):  # TODO: подумать о реализации подбрасывания карт
         self.__choose_first_one()
+        
         # Играется до моментка пока у одного из игроков не останется карт
         while self.__player.get_hand_size() != 0 and self.__bot_player.get_hand_size() != 0:
             self.__lead()

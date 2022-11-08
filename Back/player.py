@@ -107,4 +107,4 @@ class Player:
             return True
 
     def get_hand(self):
-        return self.__hand
+        return [card.get_card_dict() for card in self.__hand]
