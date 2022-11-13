@@ -11,6 +11,35 @@ A = 14
 DECK_SIZE = 36
 
 
+def rank_decompiler(int_value):
+    if int_value == 6:
+        return '6'
+
+    if int_value == 7:
+        return '7'
+
+    if int_value == 8:
+        return '8'
+
+    if int_value == 9:
+        return '9'
+
+    if int_value == 10:
+        return '10'
+
+    if int_value == 11:
+        return 'J'
+
+    if int_value == 12:
+        return 'Q'
+
+    if int_value == 13:
+        return 'K'
+
+    if int_value == 14:
+        return 'A'
+
+
 class Card:
     def __init__(self, rank: str, suit: str, position: int):
         self.rank = rank
@@ -50,9 +79,10 @@ class Card:
     def get_full_info(self):
         return f'{self.rank} of {self.suit} [{self.position}]'
 
-
     def get_card_dict(self):
         return {
             "card_rank": self.get_card_value(),
             "card_suit": self.suit,
         }
+
+

@@ -29,8 +29,10 @@ class Game:
             self.__player.take_card(self.__deck.get_card())
             self.__bot_player.take_card((self.__deck.get_card()))
 
+        self.__choose_first_one()
 
-    # def test(self):
+
+    # def test(se
     #     self.__deck.get_card()
         
     def get_initial(self):
@@ -40,7 +42,7 @@ class Game:
             "player_state": self.__player.has_turn,
             "deck_size": self.get_deck_size()
         }
-    
+
     # TODO: Доделать козырь
     def get_trump(self):
         # return self.__trump
@@ -56,8 +58,8 @@ class Game:
         return self.__discard
 
     def start_game(self):  # TODO: подумать о реализации подбрасывания карт
-        self.__choose_first_one()
-        
+
+
         # Играется до моментка пока у одного из игроков не останется карт
         while self.__player.get_hand_size() != 0 and self.__bot_player.get_hand_size() != 0:
             self.__lead()
@@ -87,7 +89,7 @@ class Game:
                 self.__take_card_from_deck(self.__player, player_need)
                 self.__take_card_from_deck(self.__bot_player, bot_need)
 
-    def __end_turn(self, turn_status):
+    def end_turn(self, turn_status):
         if turn_status == 0:
             cards = self.__table.return_cards()
             cards = [card_.set_position(-1) for card_ in cards]
@@ -108,8 +110,8 @@ class Game:
         self.__take_cards(turn_status)
 
     def __choose_first_one(self):
-        self.__player.set_turn(1)
-        player_trump_cards = [card_ for card_ in self.__player.get_hand() if card_.suit == self.__trump]
+        self.__player.set_turn(True)
+        player_trump_cards = [card_ for card_ in self.__player.get_cards() if card_.suit == self.__trump]
         bot_trump_cards = [card_ for card_ in self.__bot_player.get_hand() if card_.suit == self.__trump]
         sorted(player_trump_cards, key=lambda card_: card_.get_card_value())
         sorted(bot_trump_cards, key=lambda card_: card_.get_card_value())
@@ -130,6 +132,27 @@ class Game:
         if self.__bot_player.has_turn:
             print("Bot starts")
 
+    # Ограничение на выбор карты будет по стороне фронта
+    def lead_player_side(self, player_decision):
+        # Игрок ходит \ подбрасывает
+        if player_decision:
+            player_card = self.__player.start_attack(player_decision)
+            print(player_card.get_card_dict())
+
+            bot_card = self.__bot_player.defence(player_card)
+
+            if bot_card:
+                print(bot_card.get_card_dict())
+
+            return bot_card
+        # Игрок прекращает подбрасывать
+        if not player_decision:
+            self.__give_turn()
+            self.__lead_bot_side()
+
+    def __lead_bot_side(self):
+        pass
+
     def __lead(self):
         # Часть игрока
         if self.__player.has_turn:
@@ -138,7 +161,7 @@ class Game:
 
             # Написано на случай, если игрок не захочет подкидывать карту.
             if not player_decision or self.__player.get_hand_size() == 0:
-                self.__end_turn(0)
+                self.end_turn(0)
                 self.__give_turn()
 
             else:
@@ -155,7 +178,7 @@ class Game:
                     # self.__give_turn()
                     self.__lead()
                 else:
-                    self.__end_turn(2)
+                    self.end_turn(2)
 
         # Часть бота
         if self.__bot_player.has_turn:
@@ -164,7 +187,7 @@ class Game:
 
             # на те случаи, когда бот должен подкинуть, но не может
             if not card_:
-                self.__end_turn(0)
+                self.end_turn(0)
                 self.__give_turn()
 
             if card_:
@@ -180,18 +203,18 @@ class Game:
                     self.__lead()
                 # Если игрок не бьется, то он забирает карты
                 else:
-                    self.__end_turn(1)
+                    self.end_turn(1)
 
     # Передача хода другому игроку
     def __give_turn(self):
 
         if self.__player.has_turn:
-            self.__player.set_turn(0)
-            self.__bot_player.set_turn(1)
+            self.__player.set_turn(False)
+            self.__bot_player.set_turn(True)
 
         else:
-            self.__player.set_turn(1)
-            self.__bot_player.set_turn(0)
+            self.__player.set_turn(True)
+            self.__bot_player.set_turn(False)
 
     def __take_card_from_deck(self, player, amount_of_cards):
         if amount_of_cards > 0:
@@ -199,3 +222,6 @@ class Game:
                 if self.__deck.get_deck_size() == 0:
                     break
                 player.take_card(self.__deck.get_card())
+
+    def return_player_hand(self):
+        return self.return_player().get_hand()

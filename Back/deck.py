@@ -1,11 +1,11 @@
 import card
 from random import shuffle, choice
-
+#
 
 class Deck:
     def __init__(self):
         self.__deck = []
-        self.__trump = choice(['Diamonds', 'Hearts', 'Clubs', 'Spades'])
+        self.__trump = ""
         self.__create_deck()
 
     def __create_deck(self):
@@ -14,6 +14,7 @@ class Deck:
                 self.__deck.append(card.Card(rank, suit, 0))
 
         shuffle(self.__deck)
+        self.__trump = self.__deck[-1].suit
 
     def get_deck(self):
         return self.__deck

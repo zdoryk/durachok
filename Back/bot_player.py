@@ -38,7 +38,7 @@ class BotPlayer:  # TODO: дописать бота
             possible_card.extend([card_ for card_ in self.__hand if card_.suit == self.__trump])
 
         if len(possible_card) == 0:
-            return 0
+            return False
         else:
             # print(possible_card)
             card_ = sorted(possible_card, key=lambda c: c.get_card_value())[0]
