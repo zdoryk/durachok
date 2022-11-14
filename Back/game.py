@@ -31,17 +31,20 @@ class Game:
 
         self.__choose_first_one()
 
-
-    # def test(se
-    #     self.__deck.get_card()
-        
-    def get_initial(self):
-        return {
+    def get_world_info(self):
+        x = {
             "player_cards": self.return_player().get_hand(),
             "trump": self.get_trump(),
             "player_state": self.__player.has_turn,
             "deck_size": self.get_deck_size()
         }
+        if self.__bot_player.has_turn:
+            decision = self.lead_bot_side(0)
+            x["bot_card"] = decision
+
+        x["bot_hand_size"] = self.__bot_player.get_hand_size()
+
+        return x
 
     # TODO: Доделать козырь
     def get_trump(self):
@@ -58,7 +61,6 @@ class Game:
         return self.__discard
 
     def start_game(self):  # TODO: подумать о реализации подбрасывания карт
-
 
         # Играется до моментка пока у одного из игроков не останется карт
         while self.__player.get_hand_size() != 0 and self.__bot_player.get_hand_size() != 0:
@@ -90,6 +92,7 @@ class Game:
                 self.__take_card_from_deck(self.__bot_player, bot_need)
 
     def end_turn(self, turn_status):
+        # Бито
         if turn_status == 0:
             cards = self.__table.return_cards()
             cards = [card_.set_position(-1) for card_ in cards]
@@ -97,16 +100,20 @@ class Game:
             #     card_.set_position(-1)
             self.__discard.extend(cards)
 
+        # Игрок забирает карты на столе
         if turn_status == 1:
             for card_ in self.__table.return_cards():
                 self.__player.take_card(card_)
 
+        # Бот забирает карты на столе
         if turn_status == 2:
             for card_ in self.__table.return_cards():
                 self.__bot_player.take_card(card_)
 
+        # Чистим стол
         self.__table.clear_table()
 
+        # Добираем карты из колоды, если на то есть нужда
         self.__take_cards(turn_status)
 
     def __choose_first_one(self):
@@ -138,20 +145,55 @@ class Game:
         if player_decision:
             player_card = self.__player.start_attack(player_decision)
             print(player_card.get_card_dict())
+            self.__table.new_attack(player_card)
 
             bot_card = self.__bot_player.defence(player_card)
 
             if bot_card:
+                self.__table.beat_card(bot_card)
                 print(bot_card.get_card_dict())
 
             return bot_card
+
         # Игрок прекращает подбрасывать
         if not player_decision:
-            self.__give_turn()
-            self.__lead_bot_side()
+            # Убираем карты в отбой
+            self.end_turn(0)
 
-    def __lead_bot_side(self):
-        pass
+            # Передаем ход боту
+            self.__give_turn()
+            self.lead_bot_side()
+
+    def lead_bot_side(self, player_beat=0):
+        # Если игрок бьет карту бота / ограничение на выбор карты по стороне фронта
+        if player_beat:
+            # Если игрок собирается бить карту, то переменная player_beat будет картой : Card
+            self.__table.beat_card(player_beat)
+
+            # Перебрасываем на часть с подкидыванием бота
+            player_beat = 0
+
+        # Игрок решил забрать карты на столе
+        if player_beat == -1:
+            self.end_turn(1)
+            # Предпологаю, что визуальная очистка стола будет по стороне веба
+            self.lead_bot_side(0)
+
+        # Бота начинает ход/подбрасывает
+        if player_beat == 0:
+            # бот походил
+            card_ = self.__bot_player.start_attack(self.__table.return_cards())
+
+            # на те случаи, когда бот должен подкинуть, но не может/ не хочет
+            if not card_:
+                self.end_turn(0)
+                self.__give_turn()
+                return self.get_world_info()
+
+            if card_:
+                # Карта появилась на столе
+                self.__table.new_attack(card_)
+                return card_.get_card_dict()
 
     def __lead(self):
         # Часть игрока
@@ -225,3 +267,6 @@ class Game:
 
     def return_player_hand(self):
         return self.return_player().get_hand()
+
+    def return_table(self):
+        return self.__table.return_cards()

@@ -13,7 +13,7 @@ class Table:
         self.__table.append([card])
 
     def return_cards(self) -> [Card]:
-        return [card for i in self.__table for card in i]
+        return [card for pair in self.__table for card in pair]
 
     def clear_table(self):
         self.__table = []

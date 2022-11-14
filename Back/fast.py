@@ -34,7 +34,7 @@ app.add_middleware(
 @app.get("/initial")
 async def start_game():
     try:
-        return {"status": "OK", "data": our_game.get_initial()}
+        return {"status": "OK", "data": our_game.get_world_info()}
     except Exception as e:
         return e
 
@@ -52,24 +52,55 @@ class PlayerCard(BaseModel):
     card_rank: int
     card_suit: str
 
-#
+
 @app.post("/player_card")
 async def player_card(p_card: PlayerCard):
     try:
-        card_ = [rank_decompiler(int(p_card.dict()['card_rank'])), p_card.dict()['card_suit']]
+        # Если игрок начинает ход / подбрасывает
+        if our_game.return_player().has_turn:
+            card_ = [rank_decompiler(int(p_card.dict()['card_rank'])), p_card.dict()['card_suit']]
 
-        bot_card = our_game.lead_player_side(card_)
+            # Бот выбрал карту
+            bot_card = our_game.lead_player_side(card_)
 
-        print(f"bot card : {bot_card}")
+            print(f"bot card : {bot_card}")
 
-        print(type(bot_card))
-#
-        if bot_card:
-            return {"Status": "200 OK", "bot_card": f"{bot_card.get_card_dict()}"}
+            print(type(bot_card))
 
-        if not bot_card:
-            our_game.end_turn(2)
-            return {"Status": "200 OK", "bot_card": "-1"}
+            # Если бот выбрал бить карту на столе
+            if bot_card:
+                return {"Status": "200 OK", "bot_card": f"{bot_card.get_card_dict()}"}
+
+            # Бот решил забрать карты на столе
+            if not bot_card:
+                our_game.end_turn(2)
+                return {"Status": "200 OK", "bot_card": "-1"}
+
+        # Если игрок защищается
+        if not our_game.return_player().has_turn:
+            # Игрок решил побить карту на столе
+            if int(p_card.dict()['card_rank']) != -1:
+                card_ = [rank_decompiler(int(p_card.dict()['card_rank'])), p_card.dict()['card_suit']]
+
+                # Либо получим передачу хода, либо новую карту от бота | Мы всегда получаем словарь на выходе
+                decision = our_game.lead_bot_side(card_)
+
+                # Если бот прекратил подбрасывать
+                if "bot_hand_size" in decision.keys():
+                    return {"Status": "200 OK", "data": decision}
+
+                if "card_suit" in decision.keys():
+                    return {"Status": "200 OK", "bot_card": decision}
+
+            # Игрок решил забрать забрать карты на столе /  На свой ответ он получет
+            if int(p_card.dict()['card_rank']) == -1:
+                decision = our_game.lead_bot_side(-1)
+                return {"Status": "200 OK", "data": f"{our_game.get_world_info()}", "bot_card": decision }
 
     except Exception as e:
         return e
+
+@app.post("/get_table")
+async def get_table():
+    cards = [card_.get_card_dict() for card_ in our_game.return_table()]
+    return {"Status": "200 OK", "cards": cards}
