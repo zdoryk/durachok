@@ -38,7 +38,7 @@ class Game:
             "player_state": self.__player.has_turn,
             "deck_size": self.get_deck_size()
         }
-        if self.__bot_player.has_turn:
+        if self.__bot_player.has_turn and not self.__table.return_cards():
             decision = self.lead_bot_side(0)
             x["bot_card"] = decision
 
