@@ -24,8 +24,9 @@ class Player:
 
     def start_attack(self, card: []):
         for card_id in range(len(self.__hand)):
-            if self.__hand[card_id].rank == card[0] and self.__hand[card_id].suit == card[1]:
-                return self.__hand.pop(card_id)
+            if self.__hand[card_id].rank == card[0] and self.__hand[card_id].suit.lower() == card[1].lower():
+                card_ = self.__hand.pop(card_id)
+                return card_
 
     def set_turn(self, state):
         self.has_turn = state

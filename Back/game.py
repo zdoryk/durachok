@@ -143,13 +143,17 @@ class Game:
     def lead_player_side(self, player_decision):
         # Игрок ходит \ подбрасывает
         if player_decision:
+            print('H1')
             player_card = self.__player.start_attack(player_decision)
             print(player_card.get_card_dict())
             self.__table.new_attack(player_card)
+            print('H2')
 
             bot_card = self.__bot_player.defence(player_card)
 
             if bot_card:
+                print('HB1')
+
                 self.__table.beat_card(bot_card)
                 print(bot_card.get_card_dict())
 
@@ -164,11 +168,13 @@ class Game:
             self.__give_turn()
             self.lead_bot_side()
 
-    def lead_bot_side(self, player_beat=0):
+    def lead_bot_side(self, player_beat=0, p_card=[]):
         # Если игрок бьет карту бота / ограничение на выбор карты по стороне фронта
-        if player_beat:
+        if player_beat == 1:
             # Если игрок собирается бить карту, то переменная player_beat будет картой : Card
-            self.__table.beat_card(player_beat)
+            player_card = self.__player.start_attack(p_card)
+
+            self.__table.beat_card(player_card)
 
             # Перебрасываем на часть с подкидыванием бота
             player_beat = 0

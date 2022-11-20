@@ -45,6 +45,7 @@ class Card:
         self.rank = rank
         self.suit = suit
         self.position = position  # REST solution
+        self.card_index = 0
 
     def get_card_info(self) -> str:
         return f'{self.rank} of {self.suit}'
@@ -82,7 +83,9 @@ class Card:
     def get_card_dict(self):
         return {
             "card_rank": self.get_card_value(),
-            "card_suit": self.suit,
+            "card_suit": self.suit.lower(),
+            "card_height": 120,
+            "card_index": self.card_index
         }
 
 
