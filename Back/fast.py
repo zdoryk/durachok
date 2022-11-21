@@ -62,7 +62,7 @@ async def player_card(p_card: PlayerCard):
             # Для тех случаев, когда игрок уже походил и бот побился
             if int(p_card.dict()['card_rank']) == -1:
                 data = our_game.lead_player_side(False)
-                return {"Status": "200 OK", "data": data}
+                return {"Status": "200 OK", "data": data, "discard_size": our_game.return_discard_size()}
 
             else:
                 card_ = [rank_decompiler(int(p_card.dict()['card_rank'])), p_card.dict()['card_suit']]
@@ -78,12 +78,13 @@ async def player_card(p_card: PlayerCard):
 
                 # Если бот выбрал бить карту на столе
                 if bot_card:
-                    return {"Status": "200 OK", "bot_card": f"{bot_card.get_card_dict()}"}
+                    return {"Status": "200 OK", "bot_card": f"{bot_card.get_card_dict()}",
+                            "discard_size": our_game.return_discard_size()}
 
                 # Бот решил забрать карты на столе
                 if not bot_card:
                     our_game.end_turn(2)
-                    return {"Status": "200 OK", "bot_card": "-1"}
+                    return {"Status": "200 OK", "bot_card": "-1", "discard_size": our_game.return_discard_size()}
 
         # Если игрок защищается
         if not our_game.return_player().has_turn:
@@ -96,7 +97,7 @@ async def player_card(p_card: PlayerCard):
 
                 # Если бот прекратил подбрасывать
                 if "bot_hand_size" in decision.keys():
-                    return {"Status": "200 OK", "data": decision}
+                    return {"Status": "200 OK", "data": decision, "discard_size": our_game.return_discard_size()}
 
                 if "card_suit" in decision.keys():
                     return {"Status": "200 OK", "bot_card": decision}
@@ -104,7 +105,8 @@ async def player_card(p_card: PlayerCard):
             # Игрок решил забрать забрать карты на столе /  На свой ответ он получет
             if int(p_card.dict()['card_rank']) == -1:
                 decision = our_game.lead_bot_side(-1)
-                return {"Status": "200 OK", "data": f"{our_game.get_world_info()}", "bot_card": decision}
+                return {"Status": "200 OK", "data": f"{our_game.get_world_info()}", "bot_card": decision,
+                        "discard_size": our_game.return_discard_size()}
 
     except Exception as e:
         return e

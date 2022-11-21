@@ -40,7 +40,10 @@ class Game:
         }
         if self.__bot_player.has_turn and not self.__table.return_cards():
             decision = self.lead_bot_side(0)
-            x["bot_card"] = decision
+            if decision:
+                x["bot_card"] = decision
+            else:
+                x["bot_card"] = self.__table.return_card_for_beat().get_card_dict()
 
         x["bot_hand_size"] = self.__bot_player.get_hand_size()
 
@@ -57,8 +60,8 @@ class Game:
     def get_deck_size(self) -> int:
         return self.__deck.get_deck_size()
 
-    def return_discard(self):
-        return self.__discard
+    def return_discard_size(self):
+        return len(self.__discard)
 
     def start_game(self):  # TODO: подумать о реализации подбрасывания карт
 
