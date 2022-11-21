@@ -1,0 +1,1 @@
+Python with FastAPI as REST API + SQL database maybe SQL light or postgres
