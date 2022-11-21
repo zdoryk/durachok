@@ -78,7 +78,7 @@ async def player_card(p_card: PlayerCard):
 
                 # Если бот выбрал бить карту на столе
                 if bot_card:
-                    return {"Status": "200 OK", "bot_card": f"{bot_card.get_card_dict()}",
+                    return {"Status": "200 OK", "bot_card": bot_card.get_card_dict(),
                             "discard_size": our_game.return_discard_size()}
 
                 # Бот решил забрать карты на столе
@@ -105,7 +105,7 @@ async def player_card(p_card: PlayerCard):
             # Игрок решил забрать забрать карты на столе /  На свой ответ он получет
             if int(p_card.dict()['card_rank']) == -1:
                 decision = our_game.lead_bot_side(-1)
-                return {"Status": "200 OK", "data": f"{our_game.get_world_info()}", "bot_card": decision,
+                return {"Status": "200 OK", "data": our_game.get_world_info(), "bot_card": decision,
                         "discard_size": our_game.return_discard_size()}
 
     except Exception as e:
