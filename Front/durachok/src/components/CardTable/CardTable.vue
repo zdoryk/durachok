@@ -3,16 +3,16 @@
 <!--    <v-card v-bind:card="card_value"/>-->
     <div class="first-column">
       <div class="card-deck">
-        <div class="card-deck-amount">Koloda: 10</div>
+        <div class="card-deck-amount">Deck: {{ this.deck_amount }} cards</div>
         <div class="card-deck-back"></div>
-        <CardTableCard :card="this.$store.state.kozir" id="kozir"/>
+        <CardTableCard :card="this.trump" id="trump"/>
       </div>
     </div>
     <div class="second-column">
       <div class="play-zone">
         <div class="cards-on-bot">
           <CardTableCard
-              v-for="(card_value, key, index) in this.cardsOnBot"
+              v-for="(card_value, key, index) in this.bottom_cards"
               :key="index"
               v-bind:card="card_value"
               :top_or_bot="bot"
@@ -20,7 +20,7 @@
         </div>
         <div class="cards-on-top">
           <CardTableCard
-              v-for="(card_value, key, index) in this.cardsOnTop"
+              v-for="(card_value, key, index) in this.top_cards"
               :key="index"
               v-bind:card="card_value"
               :top_or_bot="top"
@@ -31,9 +31,9 @@
       </div>
     </div>
     <div class="third-column">
-      <div class="otboi">
-        <div class="card-deck-amount">Otboi: 10</div>
-        <div class="card-deck-back otboi-card-back"></div>
+      <div class="muck">
+        <div class="card-deck-amount">Muck: {{ this.muck_amount }} cards</div>
+        <div class="card-deck-back muck-card-back"></div>
       </div>
     </div>
   </div>
@@ -42,6 +42,7 @@
 <script>
 
 import CardTableCard from "@/components/CardTable/CardTableCard"
+import {mapGetters} from "vuex";
 
 export default {
   name: "CardTable",
@@ -61,6 +62,15 @@ export default {
     cardsOnBot(){
       return this.$store.state.cards_on_bot
     },
+
+    ...mapGetters({
+      card_values: "CARD_VALUES",
+      top_cards: "TOP_CARDS",
+      bottom_cards: "BOTTOM_CARDS",
+      deck_amount: "DECK_AMOUNT",
+      muck_amount: "MUCK_AMOUNT",
+      trump: "TRUMP"
+    }),
 
 
 
@@ -125,13 +135,13 @@ export default {
     z-index: 2;
   }
 
-  .otboi-card-back{
+  .muck-card-back{
     rotate: 0deg;
     left: 0;
     bottom: 0;
   }
 
-  #kozir{
+  #trump{
     position: relative;
     bottom: 120px;
     z-index: 1;

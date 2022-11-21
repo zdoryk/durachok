@@ -21,7 +21,7 @@
 import CardTable from "@/components/CardTable/CardTable";
 import HandWithCards from "@/components/HandWithCards/HandWithCards";
 import OpponentComponent from "@/components/Opponent";
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 
 
 export default {
@@ -33,11 +33,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['GET_INITIAL'])
+    // ...mapActions(['GET_INITIAL'])
   },
-  created() {
-    this.GET_INITIAL()
-  },
+  // created() {
+  //   this.GET_INITIAL()
+  // },
   computed: {
 
     ...mapGetters({
@@ -52,19 +52,20 @@ export default {
     playerActionName(){
       if (this.player.player_state === 1){
         if (this.cards.some(card => this.$store.state.used_card_ranks.includes(card.card_rank))){
-          console.log('Attack')
+          // console.log('Attack')
           return "Attack"
         }
         return "Pass"
       }
       if (this.player.player_state === 2){
-        let matching_cards = this.cards.filter(card => card.card_suit === this.lastBottomCard.card_suit && card.card_rank > this.lastBottomCard.card_rank)
-        if(matching_cards.length){
-          // console.log(1)
-          return ""
-        }
-        else {
-          return "Take"
+        if (this.lastBottomCard) {
+          let matching_cards = this.cards.filter(card => card.card_suit === this.lastBottomCard.card_suit && card.card_rank > this.lastBottomCard.card_rank)
+          if (matching_cards.length) {
+            // console.log(1)
+            return ""
+          } else {
+            return "Take"
+          }
         }
       }
       return ''

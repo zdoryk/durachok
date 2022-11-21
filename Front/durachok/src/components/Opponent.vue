@@ -5,22 +5,28 @@
       <div class="opp-cards">
         <div
             class="opp-card"
-            v-for="n in this.length"
+            v-for="n in this.opponent_cards_amount"
             :key="n"
         ></div>
       </div>
-      <div class="cards_amount">{{this.length}} cards</div>
+      <div class="cards_amount">{{this.opponent_cards_amount}} cards</div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "OpponentComponent",
   data(){
     return{
-      length: 20
     }
+  },
+  computed: {
+    ...mapGetters({
+      opponent_cards_amount: 'OPPONENT_CARDS_AMOUNT'
+    })
   }
 
 }

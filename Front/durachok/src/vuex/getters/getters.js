@@ -13,6 +13,18 @@ let getters = {
     },
     PLAYER(state){
         return state.player
+    },
+    DECK_AMOUNT(state){
+        return state.deck_amount
+    },
+    TRUMP(state){
+        return state.trump
+    },
+    MUCK_AMOUNT(state){
+        return state.muck_amount
+    },
+    OPPONENT_CARDS_AMOUNT(state){
+        return state.opponent_cards_amount
     }
 
 

@@ -1,6 +1,6 @@
 <template>
   <div class="card-table-card" :style="cssVars">
-    <img :style="cssVars" class="card-kozir" :src="icon" v-if="this.card.card_height===150"/>
+    <img :style="cssVars" class="card-trump" :src="icon" v-if="this.card.card_height===150"/>
     <img :style="cssVars" class="card" :src="icon" v-if="this.card.card_height===120"/>
   </div>
 </template>
@@ -90,8 +90,9 @@ export default {
   font-size: 30px;
 }
 
-.card-kozir, .card{
+.card-trump, .card{
   height: var(--height);
+  width: 80px;
   transition: 0.1s ease-in-out;
 }
 
