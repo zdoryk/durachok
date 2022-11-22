@@ -27,6 +27,10 @@ let actions = {
       commit("START_GAME")
     },
 
+    ERASE_OLD_DATA({commit}){
+      commit("ERASE_OLD_DATA_MUTATION")
+    },
+
     async GET_INITIAL({commit, dispatch}){
         return axios('http://127.0.0.1:8000/initial/', {
             method: "GET",
@@ -119,7 +123,7 @@ let actions = {
             })
     },
 
-    async POST_PLAYER_CARD({commit, dispatch, }, card){
+    async POST_PLAYER_CARD({dispatch, }, card){
         console.log('-----')
         axios.post('http://localhost:8000/player_card', card)
             .then( (data) => {
@@ -148,6 +152,7 @@ let actions = {
                             return 'Push'
                         } else {
                             console.log('Bot took cards')
+                            alert('Bot took cards')
                             dispatch('GET_TABLE')
                             dispatch('GET_WORLD_INFO')
                         }
@@ -156,7 +161,8 @@ let actions = {
                         console.log(card)
                         console.log('Response: ')
                         console.log(data.data)
-                        if (data.data.data.bot_card !== undefined) {
+                        if (typeof data.data.data.bot_card !== 'undefined') {
+                        // if (data.data.data !== null) {
                             // if (data.data.data.bot_card !== '-1') {
                                 console.log('Bot card: ')
                                 console.log(data.data.data.bot_card)
@@ -175,15 +181,37 @@ let actions = {
                         } else {
                             console.log('Bot said: "Muck!"')
                             dispatch('GET_WORLD_INFO')
-                            this.state.used_card_ranks = []
-                            this.state.cards_on_bot = []
-                            this.state.cards_on_top = []
+                            dispatch('ERASE_OLD_DATA')
+                            alert('Bot said: "Muck!"')
+                            // this.state.used_card_ranks = []
+                            // this.state.cards_on_bot = []
+                            // this.state.cards_on_top = []
                             this.state.player.player_state = 1
                             console.log("Now it's players turn")
                         }
                     }
                 }
             );
+    },
+    async END_TURN({dispatch}, action){
+        // console.log(this.state.player.player_state)
+        // console.log(action)
+        // axios.post('http://localhost:8000/player_card', card)
+        axios.post('http://localhost:8000/player_card', {card_rank: '-1', card_suit: 'hearts'})
+            .then( (data) => {
+                if (action === 'Take'){
+                    console.log('Player took cards')
+                    this.state.player.player_state = 1
+                } else {
+                    console.log('Player said: "Mock!"')
+                    this.state.player.player_state = 2
+                }
+                console.log('Bot response:')
+                console.log(data)
+                dispatch('GET_WORLD_INFO')
+                dispatch('GET_TABLE')
+                dispatch('ERASE_OLD_DATA')
+            })
     }
 
 }

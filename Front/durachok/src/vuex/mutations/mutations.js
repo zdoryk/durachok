@@ -62,6 +62,16 @@ let mutations = {
         }
     },
 
+    ERASE_OLD_DATA_MUTATION: (state) => {
+        state.used_card_ranks = []
+        state.cards_on_bot = []
+        state.cards_on_top = []
+        // if (state.player.player_state === 1){
+        //     state.player.player_state = 2
+        // } else {
+        //     state.player.player_state = 1
+        // }
+    }
 }
 
 

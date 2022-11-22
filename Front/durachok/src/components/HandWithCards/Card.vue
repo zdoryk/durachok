@@ -77,7 +77,7 @@ export default {
               this.throwACard(1)
           } else {
             alert("You cannot use this card try another one with one of these ranks: ( " + this.parseProxy(this.$store.state.used_card_ranks).map(rank => this.card_values[rank]) + " )")
-            this.throwACard(1)
+            // this.throwACard(1)
           }
         }
       } else { // State to def
