@@ -13,6 +13,12 @@
 <!--        <div :style="{'visibility': 'hidden'}">{{// playerAction}}</div>-->
       </div>
     </div>
+    <div class="win" v-if="who_won === 1">
+      Well played, you won!
+    </div>
+    <div class="loose" v-if="who_won === 2">
+      Nice try, better luck next time!
+    </div>
   </div>
 </template>
 
@@ -52,6 +58,18 @@ export default {
       player: "PLAYER",
       cards: "CARDS",
     }),
+
+    who_won(){
+      if (this.$store.state.deck_amount === 0){
+        if (this.$store.state.cards.length === 0){
+          return 1
+        }
+        if (this.$store.state.opponent_cards_amount === 0){
+          return 2
+        }
+      }
+      return 0
+    },
 
     lastBottomCard(){
       return this.$store.state.cards_on_bot.at(-1)
@@ -143,6 +161,30 @@ export default {
   .action:hover{
     background-color: #7cacff;
     box-shadow: 0 5px 2px 1px #6f94dd;
+  }
+
+
+  .win, .loose{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    opacity: 0.9;
+  }
+
+  .win{
+    background-color: #6c97e2;
+  }
+
+  .loose{
+    background-color: #d16671;
   }
 
 </style>

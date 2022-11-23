@@ -4,7 +4,7 @@
     <div class="first-column">
       <div class="card-deck">
         <div class="card-deck-amount">Deck: {{ this.deck_amount }} cards</div>
-        <div class="card-deck-back"></div>
+        <div class="card-deck-back card-deck"></div>
         <CardTableCard :card="this.trump" id="trump"/>
       </div>
     </div>
@@ -135,15 +135,19 @@ export default {
     z-index: 2;
   }
 
+  .card-deck {
+    bottom: -30px;
+  }
+
   .muck-card-back{
     rotate: 0deg;
     left: 0;
-    bottom: 0;
+    bottom: -10px;
   }
 
   #trump{
     position: relative;
-    bottom: 120px;
+    bottom: 145px;
     z-index: 1;
   }
 

@@ -125,6 +125,7 @@ let actions = {
 
     async POST_PLAYER_CARD({dispatch, }, card){
         console.log('-----')
+        console.log(this.state.player.player_state)
         axios.post('http://localhost:8000/player_card', card)
             .then( (data) => {
                 // console.log(this.state)
@@ -141,6 +142,10 @@ let actions = {
                             dispatch('GET_TABLE')
                             dispatch('GET_WORLD_INFO')
                             return 'Defend'
+                        }
+                        if ( typeof  data.data.bot_card !== 'undefined'){
+                            dispatch('GET_TABLE')
+                            dispatch('GET_WORLD_INFO')
                         }
                         if (data.data.bot_card !== '-1'){
                             console.log('Bot card:')
@@ -201,7 +206,7 @@ let actions = {
             .then( (data) => {
                 if (action === 'Take'){
                     console.log('Player took cards')
-                    this.state.player.player_state = 1
+                    this.state.player.player_state = 2
                 } else {
                     console.log('Player said: "Mock!"')
                     this.state.player.player_state = 2
