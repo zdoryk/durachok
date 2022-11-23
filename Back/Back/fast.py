@@ -121,6 +121,13 @@ async def get_world():
     info['discard_size'] = our_game.return_discard_size()
     return {"Status": "200 OK", "data": info}
 
+
+@app.get("/restart")
+async def restart():
+    # TODO:
+    # Обьект класа должен вызывать метод пересоздания игры
+    return {"Status": "200 OK"}
+
 @app.get("/get_table")
 async def get_table():
     cards = [card_.get_card_dict() for card_ in our_game.return_table()]

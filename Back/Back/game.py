@@ -17,6 +17,10 @@ class Game:
         self.__table = Table()
         self.__discard = []
         self.__trump = self.__deck.get_trump()
+        self.__trump_card = {
+            "card_suit": self.__trump,
+            "card_rank": self.__deck.get_last_card().get_card_value()
+        }
 
         # Players :
         self.__player = Player(self.__trump)
@@ -34,7 +38,7 @@ class Game:
     def get_world_info(self):
         x = {
             "player_cards": self.return_player().get_hand(),
-            "trump": self.get_trump(),
+            "trump": self.__trump_card,
             "player_state": self.__player.has_turn,
             "deck_size": self.get_deck_size()
         }
