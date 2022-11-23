@@ -124,9 +124,9 @@ async def get_world():
 
 @app.get("/restart")
 async def restart():
-    # TODO:
-    # Обьект класа должен вызывать метод пересоздания игры
-    return {"Status": "200 OK"}
+    our_game.restart_game()
+    return {"status": "OK", "data": our_game.get_world_info()}
+
 
 @app.get("/get_table")
 async def get_table():

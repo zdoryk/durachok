@@ -28,6 +28,22 @@ class Game:
 
         self.__create_game()
 
+    def restart_game(self):
+        self.__deck = Deck()
+        self.__table = Table()
+        self.__discard = []
+        self.__trump = self.__deck.get_trump()
+        self.__trump_card = {
+            "card_suit": self.__trump,
+            "card_rank": self.__deck.get_last_card().get_card_value()
+        }
+
+        # Players :
+        self.__player = Player(self.__trump)
+        self.__bot_player = BotPlayer(self.__trump)
+
+        self.__create_game()
+
     def __create_game(self):
         for i in range(6):
             self.__player.take_card(self.__deck.get_card())
