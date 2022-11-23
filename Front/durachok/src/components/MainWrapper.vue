@@ -15,9 +15,19 @@
     </div>
     <div class="win" v-if="who_won === 1">
       Well played, you won!
+      <div class="button">
+        <div class="restart" @click="restart_game">
+          Restart
+        </div>
+      </div>
     </div>
     <div class="loose" v-if="who_won === 2">
       Nice try, better luck next time!
+      <div class="button">
+        <div class="restart" @click="restart_game">
+          Restart
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +49,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['POST_PLAYER_CARD', 'GET_WORLD_INFO', 'GET_TABLE', 'ERASE_OLD_DATA', 'END_TURN']),
+    ...mapActions(['POST_PLAYER_CARD', 'GET_WORLD_INFO', 'GET_TABLE', 'ERASE_OLD_DATA', 'END_TURN', 'RESTART_GAME']),
     end_turn(){
       // const action = this.playerActionName
       // const card = {
@@ -47,6 +57,10 @@ export default {
       //   card_suit: 'hearts'
       // }
       this.END_TURN(this.playerActionName)
+    },
+    restart_game() {
+      console.log('RESTART')
+      this.RESTART_GAME()
     }
   },
   // created() {
@@ -176,15 +190,39 @@ export default {
     justify-content: center;
     flex-direction: column;
     color: white;
-    opacity: 0.9;
+    opacity: 1;
   }
 
   .win{
-    background-color: #6c97e2;
+    background-color: #63df91;
   }
 
   .loose{
     background-color: #d16671;
+  }
+
+  .button{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .restart{
+    border-radius: 4px;
+    cursor: pointer;
+    width: 200px;
+    height: 50px;
+    border: none;
+    color: white;
+    background-color: #6c97e2;
+    box-shadow: 0 5px 0px 1px #5c7ab3;
+    transition: 0.15s ease-in-out;
+    opacity: 1;
+  }
+
+  .restart:hover{
+    background-color: #7cacff;
+    box-shadow: 0 5px 2px 1px #6f94dd;
   }
 
 </style>

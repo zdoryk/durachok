@@ -38,6 +38,7 @@ let actions = {
         })
             .then((data) => {
                 // commit("DELETE_CARD_FROM_HAND")
+                data.data.data['discard_size'] = 0
                 commit("INITIAL_SET_UP", data.data.data)
                 if (data.data.data.player_state === false) {
                     dispatch('GET_TABLE_INITIAL')
@@ -217,8 +218,19 @@ let actions = {
                 dispatch('GET_TABLE')
                 dispatch('ERASE_OLD_DATA')
             })
-    }
+    },
 
+    async RESTART_GAME({dispatch}){
+        return axios('http://127.0.0.1:8000/restart', {
+            method: "GET",
+            // headers: {'X-Requested-With': 'XMLHttpRequest'},
+        }).then((data) => {
+            if(data.data.status === 'OK'){
+                dispatch('GET_INITIAL')
+                dispatch('GET_TABLE')
+            }
+        })
+    }
 }
 
 
