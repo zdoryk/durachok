@@ -18,8 +18,6 @@ W naszym projekcie mamy od razu 2 aplikacji:
 
 ## Krok po kroku
 
-### Downloading
-
 1. Open this link https://github.com/zdoryk/durachok
 2. Click to the green button "Code"
 3. Click download ZIP
