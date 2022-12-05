@@ -10,7 +10,7 @@ let store = createStore({
     state: {
         game_started: false,
         card_values: {
-            4: "4",
+            0: "suit",
             6: "6",
             7: "7",
             8: "8",

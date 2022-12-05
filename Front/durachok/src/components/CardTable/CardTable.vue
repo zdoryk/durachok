@@ -4,8 +4,14 @@
     <div class="first-column">
       <div class="card-deck">
         <div class="card-deck-amount">Deck: {{ this.deck_amount }} cards</div>
-        <div class="card-deck-back card-deck"></div>
-        <CardTableCard :card="this.trump" id="trump"/>
+        <div class="card-deck-back card-deck" v-if="deck_amount!== 0"></div>
+        <CardTableCard :card="this.trump" id="trump"  v-if="deck_amount!== 0"/>
+        <CardTableCard :card="{
+          card_rank: 0,
+          card_suit: this.trump.card_suit,
+          card_height: this.trump.card_height,
+          card_index: this.trump.card_index
+        }" id="trump1"  v-if="deck_amount=== 0"/>
       </div>
     </div>
     <div class="second-column">
@@ -145,7 +151,7 @@ export default {
     bottom: -10px;
   }
 
-  #trump{
+  #trump, #trump1{
     position: relative;
     bottom: 145px;
     z-index: 1;

@@ -65,10 +65,18 @@ import _queen_of_hearts2 from './queen_of_hearts2.svg'
 import _queen_of_spades from './queen_of_spades.svg'
 import _queen_of_spades2 from './queen_of_spades2.svg'
 import _red_joker from './red_joker.svg'
+import _suit_of_clubs from './suit_of_clubs.svg'
+import _suit_of_diamonds from './suit_of_diamonds.svg'
+import _suit_of_hearts from './suit_of_hearts.svg'
+import _suit_of_spades from './suit_of_spades.svg'
 
 // etc
 
 export {
+    _suit_of_diamonds,
+    _suit_of_clubs,
+    _suit_of_hearts,
+    _suit_of_spades,
     _10_of_clubs,
     _10_of_diamonds,
     _10_of_hearts,
